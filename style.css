@@ -206,3 +206,4 @@ h3{font-size:1.45rem}
   .hero-content{padding:4.5rem 0}
   .brand{font-size:.85rem}
 }
+.g-icon{display:grid;place-items:center;width:52px;height:52px;flex-shrink:0;border-radius:14px;background:var(--navy);font-size:1.5rem}
