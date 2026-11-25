@@ -207,3 +207,12 @@ h3{font-size:1.45rem}
   .brand{font-size:.85rem}
 }
 .g-icon{display:grid;place-items:center;width:52px;height:52px;flex-shrink:0;border-radius:14px;background:var(--navy);font-size:1.5rem}
+.hp{position:absolute;left:-9999px;width:1px;height:1px;opacity:0}
+.form-status{font-size:.88rem;text-align:center;min-height:0}
+.form-status.error{color:#b42318;background:#fef3f2;border:1px solid #fecdca;border-radius:10px;padding:.7rem}
+.form-status a{font-weight:700;text-decoration:underline}
+.form-success{text-align:center;padding:2rem 1rem;display:grid;gap:.8rem;justify-items:center}
+.form-success-icon{width:64px;height:64px;border-radius:50%;background:#e7f6ec;color:#16a34a;display:grid;place-items:center;font-size:2rem;font-weight:800}
+.form-success h3{color:var(--navy);font-size:1.7rem}
+.form-success p{color:var(--muted)}
+.form-success a{color:var(--orange);font-weight:700}

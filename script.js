@@ -38,26 +38,43 @@ const io = new IntersectionObserver(entries => {
 }, { threshold: 0.15 });
 targets.forEach(el => io.observe(el));
 
-// Formulaire de devis -> ouvre la messagerie avec la demande pré-remplie
-document.getElementById('devisForm').addEventListener('submit', e => {
+// Formulaire de devis -> envoi direct depuis le site (sans ouvrir la messagerie)
+const devisForm = document.getElementById('devisForm');
+devisForm.addEventListener('submit', async e => {
   e.preventDefault();
-  const f = new FormData(e.target);
-  const body =
-`Bonjour NETPRO MULTISERVICES,
-
-Je souhaite recevoir un devis gratuit.
-
-Nom / Société : ${f.get('nom')}
-Téléphone : ${f.get('tel')}
-E-mail : ${f.get('email')}
-Ville : ${f.get('ville')}
-Prestation : ${f.get('prestation')}
-Fréquence : ${f.get('frequence')}
-
-Message :
-${f.get('message')}`;
-  const subject = `Demande de devis gratuit – ${f.get('prestation')}`;
-  window.location.href = `mailto:multiservices.netpro@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  const f = new FormData(devisForm);
+  if (f.get('_honey')) return; // anti-spam
+  const btn = devisForm.querySelector('button[type="submit"]');
+  const status = document.getElementById('formStatus');
+  btn.disabled = true; btn.textContent = 'Envoi en cours…';
+  status.className = 'form-status'; status.textContent = '';
+  const data = {
+    _subject: `Nouvelle demande de devis – ${f.get('prestation')} – ${f.get('nom')}`,
+    _template: 'table',
+    _captcha: 'false',
+    'Société / Syndic': f.get('nom'),
+    'Téléphone': f.get('tel'),
+    'E-mail': f.get('email') || '—',
+    'Adresse du site': f.get('ville') || '—',
+    'Prestation': f.get('prestation'),
+    'Fréquence': f.get('frequence'),
+    'Message': f.get('message') || '—'
+  };
+  if (f.get('email')) data._replyto = f.get('email');
+  try {
+    const r = await fetch('https://formsubmit.co/ajax/multiservices.netpro@gmail.com', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify(data)
+    });
+    const j = await r.json().catch(() => ({}));
+    if (!r.ok || j.success === 'false' || j.success === false) throw new Error(j.message || 'Erreur');
+    devisForm.innerHTML = '<div class="form-success"><div class="form-success-icon">✓</div><h3>Merci, votre demande est envoyée !</h3><p>Nous vous recontactons sous 24 h pour votre devis gratuit.</p><p>Besoin urgent ? Appelez-nous au <a href="tel:+33745121063">07 45 12 10 63</a>.</p></div>';
+  } catch (err) {
+    btn.disabled = false; btn.textContent = 'Envoyer ma demande';
+    status.className = 'form-status error';
+    status.innerHTML = 'L\'envoi n\'a pas fonctionné. Réessayez ou appelez-nous au <a href="tel:+33745121063">07 45 12 10 63</a>.';
+  }
 });
 
 document.getElementById('year').textContent = new Date().getFullYear();

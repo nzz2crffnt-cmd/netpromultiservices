@@ -314,8 +314,10 @@
         </select>
       </label>
       <label>Votre message<textarea name="message" rows="4" placeholder="Nombre d'immeubles, d'étages, surface de bureaux, matériel souhaité…"></textarea></label>
+      <input type="text" name="_honey" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
       <button type="submit" class="btn btn-primary btn-block">Envoyer ma demande</button>
-      <p class="form-note">L'envoi ouvre votre messagerie avec la demande pré-remplie vers multiservices.netpro@gmail.com.</p>
+      <p class="form-status" id="formStatus" role="status"></p>
+      <p class="form-note">Votre demande nous est envoyée directement. Vos informations servent uniquement à vous répondre.</p>
     </form>
   </div>
 </section>
